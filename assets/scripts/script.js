@@ -46,8 +46,7 @@ $(document).ready(function () {
           // var newLow = $("<div class='low'></div>").append(newH);
           // var newIcon = $("<div class='icon'></div>").append();
           var newCol = $("<div class='col'></div>").append(dateDiv);
-          var newRow = $("<div class='row'></div>").append(newCol);
-          $(".container").append(newRow);
+          $(".row").append(newCol);
         }
       }
     );
