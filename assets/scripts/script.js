@@ -1,12 +1,14 @@
 $(document).ready(function () {
-
   $("#inputForm").on("submit", function (event) {
     event.preventDefault();
     var cityEl = $("#city");
     var stateEl = $("#state");
     $.getJSON(
       "https://api.openweathermap.org/data/2.5/weather?q=" +
-        cityEl.val() + "," + stateEl.val() + "," +
+        cityEl.val() +
+        "," +
+        stateEl.val() +
+        "," +
         "&units=imperial&appid=fc53c4afba46f05e9baa04eb35435488",
       function (data) {
         console.log(data);
@@ -18,6 +20,24 @@ $(document).ready(function () {
         $("#icon").attr("src", icon);
         $("#weather").append(weather);
         $("#temp").append(temp);
+      }
+    );
+
+    $.getJSON(
+      "https://api.openweathermap.org/data/2.5/forecast?q=" +
+        cityEl.val() +
+        "," +
+        stateEl.val() +
+        "," +
+        "&units=imperial&appid=fc53c4afba46f05e9baa04eb35435488",
+      function (data) {
+        for (var i = 1; i <= 5; i++) {
+          var forecastTempMinEl = data.list[i].main.temp_min;
+          var forecastTempMaxEl = data.list[i].main.temp_max;
+          // var dateEl = 
+          $("#forecastTempMin").append("Low: " + Math.floor(forecastTempMinEl));
+          $("#forecastTempMax").append("High: " + Math.floor(forecastTempMaxEl));
+        }
       }
     );
   });
