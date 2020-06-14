@@ -1,0 +1,11 @@
+html {
+  background: url(../images/sunrise.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  color: white;
+  font-family: "Source Code Pro", monospace;
+  font-weight: 200;
+  text-shadow: 1px 1px 0 #000;
+}
