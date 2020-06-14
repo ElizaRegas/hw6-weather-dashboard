@@ -34,15 +34,15 @@ $(document).ready(function () {
         for (var i = 1; i <= 2; i++) {
           var forecastTempMinEl = data.list[i].main.temp_min;
           var forecastTempMaxEl = data.list[i].main.temp_max;
-          var currentDate = moment().add(i, 'days');
-          console.log(currentDate._d);
+          var forecastDate = moment().add(i, 'days').format("MMMM Do");
+          console.log(forecastDate);
 
           var displayTempMin = $("<div id='TempMin'></div>");
 
           $(displayTempMin).append("Low: " + Math.floor(forecastTempMinEl));
           console.log(forecastTempMinEl);
           // $("#forecastTempMax").append("High: " + Math.floor(forecastTempMaxEl));
-          var dateDiv = $("<div class='date'>" + currentDate + "</div>");
+          var dateDiv = $("<div class='date'>" + forecastDate + "</div>");
           // var newLow = $("<div class='low'></div>").append(newH);
           // var newIcon = $("<div class='icon'></div>").append();
           var newCol = $("<div class='col'></div>").append(dateDiv);
