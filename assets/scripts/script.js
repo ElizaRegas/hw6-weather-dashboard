@@ -31,16 +31,42 @@ $(document).ready(function () {
         "," +
         "&units=imperial&appid=fc53c4afba46f05e9baa04eb35435488",
       function (data) {
-        for (var i = 1; i <= 5; i++) {
+        for (var i = 1; i <= 2; i++) {
           var forecastTempMinEl = data.list[i].main.temp_min;
           var forecastTempMaxEl = data.list[i].main.temp_max;
-          // var dateEl = 
-          $("#forecastTempMin").append("Low: " + Math.floor(forecastTempMinEl));
-          $("#forecastTempMax").append("High: " + Math.floor(forecastTempMaxEl));
+
+          var displayTempMin = $("<div id='TempMin'></div>");
+
+          $(displayTempMin).append("Low: " + Math.floor(forecastTempMinEl));
+          console.log(forecastTempMinEl);
+          // $("#forecastTempMax").append("High: " + Math.floor(forecastTempMaxEl));
+          var currentDate = moment().add(i, 'days');
+          console.log(currentDate);
         }
       }
     );
   });
+
+  // var displayHour = hour > 12 ? hour - 12 : hour;
+  // var hourColumn = $("<div class='col-sm-2 timeCol'></div>").text(
+  //   displayHour + ":00"
+  // );
+  // scheduleColumn = $(
+  //   `<div class='col-sm-8 schedule' id='${
+  //     hour + "a"
+  //   }'><input class="inputText"></div>`
+  // );
+  // var saveColumn = $(
+  //   `<div class="col-sm-2" id="save"><button type="button" class="btn btn-info" id='${
+  //     hour + "b"
+  //   }'><i class="fas fa-save"></i></button></div>`
+  // );
+  // var newRow = $(`<div class='row' id='${hour}'></div>`).append(
+  //   hourColumn,
+  //   scheduleColumn,
+  //   saveColumn
+  // );
+  // $(".container").append(newRow);
 
   function emptyInfo() {
     $("#icon").empty();
