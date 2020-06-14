@@ -7,6 +7,12 @@
     <!-- title -->
     <title>Weather or Not...</title>
     <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    <link
       href="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment-with-locales.min.js"
     />
     <!-- css link -->
@@ -22,28 +28,18 @@
   </head>
 
   <body>
-    <main>
+    <main class="container">
       <form id="inputForm">
-        <input
-          type="text"
-          class="textInput"
-          id="city"
-          placeholder="City"
-        />
-        <input
-          type="text"
-          class="textInput"
-          id="state"
-          placeholder="State"
-        />
-        <input type="submit"/>
+        <input type="text" class="textInput" id="city" placeholder="City" />
+        <input type="text" class="textInput" id="state" placeholder="State" />
+        <input type="submit" />
       </form>
       <div>
-        <img id="icon">
+        <img id="icon" />
         <div id="weather"></div>
         <div id="temp"></div>
       </div>
-      
+      <div class="container"></div>
     </main>
   </body>
 </html>

@@ -34,14 +34,20 @@ $(document).ready(function () {
         for (var i = 1; i <= 2; i++) {
           var forecastTempMinEl = data.list[i].main.temp_min;
           var forecastTempMaxEl = data.list[i].main.temp_max;
+          var currentDate = moment().add(i, 'days');
+          console.log(currentDate._d);
 
           var displayTempMin = $("<div id='TempMin'></div>");
 
           $(displayTempMin).append("Low: " + Math.floor(forecastTempMinEl));
           console.log(forecastTempMinEl);
           // $("#forecastTempMax").append("High: " + Math.floor(forecastTempMaxEl));
-          var currentDate = moment().add(i, 'days');
-          console.log(currentDate);
+          var dateDiv = $("<div class='date'>" + currentDate + "</div>");
+          // var newLow = $("<div class='low'></div>").append(newH);
+          // var newIcon = $("<div class='icon'></div>").append();
+          var newCol = $("<div class='col'></div>").append(dateDiv);
+          var newRow = $("<div class='row'></div>").append(newCol);
+          $(".container").append(newRow);
         }
       }
     );
@@ -61,12 +67,8 @@ $(document).ready(function () {
   //     hour + "b"
   //   }'><i class="fas fa-save"></i></button></div>`
   // );
-  // var newRow = $(`<div class='row' id='${hour}'></div>`).append(
-  //   hourColumn,
-  //   scheduleColumn,
-  //   saveColumn
-  // );
-  // $(".container").append(newRow);
+  
+
 
   function emptyInfo() {
     $("#icon").empty();
