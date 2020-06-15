@@ -9,3 +9,9 @@ body {
   font-weight: 200;
   text-shadow: 1px 1px 0 #000;
 }
+
+#header {
+  text-align: center !important;
+  margin: auto;
+  font-size: 3vw;
+}

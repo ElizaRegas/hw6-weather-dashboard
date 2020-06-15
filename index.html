@@ -28,19 +28,37 @@
   </head>
 
   <body>
+    <header>
+      <nav class="navbar navbar-dark bg-dark">
+        <span class="navbar-brand mb-0 h1" id="header">Weather Dashboard</span>
+      </nav>
+    </header>
     <main class="container">
-      <form id="inputForm">
-        <input type="text" class="textInput" id="city" placeholder="City" />
-        <input type="text" class="textInput" id="state" placeholder="State" />
-        <input type="submit" />
-      </form>
-      <div>
-        <img id="icon" />
-        <div id="weather"></div>
-        <div id="temp"></div>
+      <div class="row">
+        <aside class="col-sm-4" style="border: 5px solid black;">
+          <h4>Search for a City:</h4>
+          <form id="inputForm">
+            <input type="text" class="textInput" id="city" placeholder="City" />
+            <button type="submit"></button>
+          </form>
+        </aside>
+        <section class="col-sm-8" style="border: 5px solid black;">
+          <div class="row">
+            <div class="col-sm-12">
+              <img id="icon" />
+              <div id="weather"></div>
+              <div id="temp"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+
+            </div>
+          </div>
+        </section>
       </div>
-      <div class="container">
-        <div class="row"></div>
+
+    
       </div>
     </main>
   </body>

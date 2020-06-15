@@ -3,7 +3,7 @@ $(document).ready(function () {
     event.preventDefault();
     var cityEl = $("#city");
     var stateEl = $("#state");
-    $.getJSON(
+    $.ajax(
       "https://api.openweathermap.org/data/2.5/weather?q=" +
         cityEl.val() +
         "," +
