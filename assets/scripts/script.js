@@ -2,56 +2,57 @@ $(document).ready(function () {
   $("#inputForm").on("submit", function (event) {
     event.preventDefault();
     var cityEl = $("#city");
-    var stateEl = $("#state");
-    $.ajax(
+    var queryURL =
       "https://api.openweathermap.org/data/2.5/weather?q=" +
-        cityEl.val() +
-        "," +
-        stateEl.val() +
-        "," +
-        "&units=imperial&appid=fc53c4afba46f05e9baa04eb35435488",
-      function (data) {
-        console.log(data);
-        var icon =
-          "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png";
-        var temp = Math.floor(data.main.temp);
-        var weather = data.weather[0].main;
-        emptyInfo();
-        $("#icon").attr("src", icon);
-        $("#weather").append(weather);
-        $("#temp").append(temp);
-      }
-    );
+      cityEl.val() +
+      "," +
+      "&units=imperial&appid=fc53c4afba46f05e9baa04eb35435488";
 
-    $.getJSON(
-      "https://api.openweathermap.org/data/2.5/forecast?q=" +
-        cityEl.val() +
-        "," +
-        stateEl.val() +
-        "," +
-        "&units=imperial&appid=fc53c4afba46f05e9baa04eb35435488",
-      function (data) {
-        console.log(data);
-        for (var i = 1; i <= 5; i++) {
-          var forecastTempMinEl = data.list[i].main.temp_min;
-          var forecastTempMaxEl = data.list[i].main.temp_max;
-          var forecastDate = moment().add(i, 'days').format("MMMM Do");
-          var forecastIcon = "http://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png";
-          var iconPic = $(".icon").attr("src", forecastIcon);
-          var displayTempMin = $("<div id='TempMin'></div>");
-          var displayTempMax = $("<div id='TempMax'></div>");
+    $.ajax({
+      url: queryURL,
+      method: "GET",
+    }).then(function (response) {
+      console.log(response);
+      var cityDisplayEl = response.name;
+      var icon = "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
+        // var temp = Math.floor(data.main.temp);
+      // var weather = data.weather[0].main;
+      // emptyInfo();
+      $("#cityDisplay").text(cityDisplayEl);
+      $("#icon").attr("src", icon);
+      // $("#weather").append(weather);
+      // $("#temp").append(temp);
+    });
 
-          $(displayTempMin).append("Low: " + Math.floor(forecastTempMinEl));
-          $(displayTempMax).append("High: " + Math.floor(forecastTempMaxEl));
-          // $("#forecastTempMax").append("High: " + Math.floor(forecastTempMaxEl));
-          var newLow = $("<div class='low'></div>");
-          var newIcon = $("<div class='icon'>" + iconPic + "</div>");
-          var dateDiv = $("<div class='date'>" + forecastDate + "</div>");
-          var newCol = $("<div class='col'></div>").append(dateDiv, newIcon, newLow);
-          $(".row").append(newCol);
-        }
-      }
-    );
+    // $.getJSON(
+    //   "https://api.openweathermap.org/data/2.5/forecast?q=" +
+    //     cityEl.val() +
+    //     "," +
+    //     stateEl.val() +
+    //     "," +
+    //     "&units=imperial&appid=fc53c4afba46f05e9baa04eb35435488",
+    //   function (data) {
+    //     console.log(data);
+    //     for (var i = 1; i <= 5; i++) {
+    //       var forecastTempMinEl = data.list[i].main.temp_min;
+    //       var forecastTempMaxEl = data.list[i].main.temp_max;
+    //       var forecastDate = moment().add(i, 'days').format("MMMM Do");
+    //       var forecastIcon = "http://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png";
+    //       var iconPic = $(".icon").attr("src", forecastIcon);
+    //       var displayTempMin = $("<div id='TempMin'></div>");
+    //       var displayTempMax = $("<div id='TempMax'></div>");
+
+    //       $(displayTempMin).append("Low: " + Math.floor(forecastTempMinEl));
+    //       $(displayTempMax).append("High: " + Math.floor(forecastTempMaxEl));
+    //       // $("#forecastTempMax").append("High: " + Math.floor(forecastTempMaxEl));
+    //       var newLow = $("<div class='low'></div>");
+    //       var newIcon = $("<div class='icon'>" + iconPic + "</div>");
+    //       var dateDiv = $("<div class='date'>" + forecastDate + "</div>");
+    //       var newCol = $("<div class='col'></div>").append(dateDiv, newIcon, newLow);
+    //       $(".row").append(newCol);
+    //     }
+    //   }
+    // );
   });
 
   // var displayHour = hour > 12 ? hour - 12 : hour;
@@ -68,8 +69,6 @@ $(document).ready(function () {
   //     hour + "b"
   //   }'><i class="fas fa-save"></i></button></div>`
   // );
-  
-
 
   function emptyInfo() {
     $("#icon").empty();
