@@ -1,6 +1,7 @@
 $(document).ready(function () {
   $("#inputForm").on("submit", function (event) {
     event.preventDefault();
+    $("#uvIndex").empty();
     var cityEl = $("#city");
     var queryURL =
       "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -14,25 +15,48 @@ $(document).ready(function () {
     }).then(function (response) {
       console.log(response);
       var cityDisplayEl = response.name;
+      var dateDisplayEl = moment().format('MMMM Do YYYY');
       var icon = "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
-        // var temp = Math.floor(data.main.temp);
-      // var weather = data.weather[0].main;
-      // emptyInfo();
-      $("#cityDisplay").text(cityDisplayEl);
+      var temp = "Temperature: " + Math.floor(response.main.temp) + " °F";
+      var humidity = "Humidity: " + response.main.humidity + "%";
+      var wind = "Wind Speed: " + response.wind.speed.toFixed(1) + " MPH";
+      var lat = response.coord.lat;
+      var lon = response.coord.lon;
+      $("#cityDisplay").text(cityDisplayEl + " " + dateDisplayEl);
       $("#icon").attr("src", icon);
-      // $("#weather").append(weather);
-      // $("#temp").append(temp);
+      $("#wind").text(wind);
+      $("#temp").text(temp);
+      $("#humidity").text(humidity);
+
+      var uvqueryURL = "https://api.openweathermap.org/data/2.5/uvi?appid=fc53c4afba46f05e9baa04eb35435488&lat=" + lat + "&lon=" + lon;
+      
+      $.ajax({
+        url: uvqueryURL,
+        method: "GET"
+      }).then(function(response) {
+        var uvNumber = response.value;
+        console.log(response.value);
+        var uvButtonEl = $("<button id='uvButton'>" + response.value + "</button>");
+        if (uvNumber <= 3) {
+          uvButtonEl.css("background-color", "green");
+        } else if (uvNumber > 7) {
+          uvButtonEl.css("background-color", "red");
+        } else {
+          uvIndex.css("background-color", "orange");
+        }
+        $("#uvIndex").append("UV Index: ").append(uvButtonEl);
+      })
     });
 
-    // $.getJSON(
-    //   "https://api.openweathermap.org/data/2.5/forecast?q=" +
-    //     cityEl.val() +
-    //     "," +
-    //     stateEl.val() +
-    //     "," +
-    //     "&units=imperial&appid=fc53c4afba46f05e9baa04eb35435488",
-    //   function (data) {
-    //     console.log(data);
+
+
+    var forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityEl.val() + "," + "&units=emperial&appid=fc53c4afba46f05e9baa04eb35435488";
+    $.ajax({
+      url: forecastQueryURL,
+      method: "GET",
+    }).then(function(response) {
+      console.log(response);
+    })
     //     for (var i = 1; i <= 5; i++) {
     //       var forecastTempMinEl = data.list[i].main.temp_min;
     //       var forecastTempMaxEl = data.list[i].main.temp_max;
@@ -70,11 +94,11 @@ $(document).ready(function () {
   //   }'><i class="fas fa-save"></i></button></div>`
   // );
 
-  function emptyInfo() {
-    $("#icon").empty();
-    $("#weather").empty();
-    $("#temp").empty();
-  }
+//   function emptyInfo() {
+//     $("#icon").empty();
+//     $("#weather").empty();
+//     $("#temp").empty();
+//   }
 });
 
 // WHEN I search for a city
