@@ -1,21 +1,23 @@
 $(document).ready(function () {
-  var lastSearch = window.localStorage.getItem('city');
-  console.log(lastSearch);
-  $('#city').val(lastSearch);
+  // pulling information from local storage to populate weather info from the last searched city
+  var lastSearch = window.localStorage.getItem("city");
+  // $("#city").val(lastSearch);
+  // on-click function for searches
   $("#inputForm").on("submit", function (event) {
     event.preventDefault();
     $("#uvIndex").empty();
+
     var cityEl = $("#city");
     var queryURL =
       "https://api.openweathermap.org/data/2.5/weather?q=" +
       cityEl.val() +
       "," +
       "&units=imperial&appid=fc53c4afba46f05e9baa04eb35435488";
+    // api call to get today's weather
     $.ajax({
       url: queryURL,
       method: "GET",
     }).then(function (response) {
-      console.log(response);
       var cityDisplayEl = response.name;
       var dateDisplayEl = moment().format("MMMM Do YYYY");
       var icon =
@@ -36,13 +38,12 @@ $(document).ready(function () {
         lat +
         "&lon=" +
         lon;
-
+      // api call to get the uv index
       $.ajax({
         url: uvqueryURL,
         method: "GET",
       }).then(function (response) {
         var uvNumber = response.value;
-        console.log(response.value);
         var uvButtonEl = $(
           "<button id='uvButton'>" + response.value + "</button>"
         );
@@ -55,101 +56,54 @@ $(document).ready(function () {
         }
         $("#uvIndex").append("UV Index: ").append(uvButtonEl);
       });
-
-      // for (var i = 1; i <= 5; i++) {
-      //   console.log(response);
-        
-      //   $.ajax({
-      //     url: "https://api.openweathermap.org/data/2.5/weather?q=" +
-      //     cityEl.val() +
-      //     "," +
-      //     "&units=imperial&appid=fc53c4afba46f05e9baa04eb35435488";
-      //   })
-      //   var forecastTempMinEl = response.main.temp_min;
-      //   var forecastTempMaxEl = response.main.temp_max;
-      //   var forecastIcon = "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
-      //   var newLow = $("<div class='low'>Low: " + forecastTempMinEl + "</div>");
-      //   var newHigh = $("<div class='high'>High: " + forecastTempMaxEl + "</div>");
-      //   var newIcon = $("<img src='" + forecastIcon + "'></div>");
-      //   var dateDiv = $("<div class='date'>" + forecastDate + "</div>");
-      //   var newCol = $("<div class='col' id='forecast'" + i + "></div>").append(dateDiv, newIcon, newLow, newHigh);
-      //   // $("#forecast" + i).attr("src", forecastIcon);
-      //   $("#forecastDiv").append(newCol);
-      // }
-      // var cityId = response.sys.id;
     });
+
     var forecastQuery =
       "https://api.openweathermap.org/data/2.5/forecast/?q=" +
       cityEl.val() +
       "&units=imperial&appid=a5e5240beae7c329a8e79847c343d8d3";
-      console.log(forecastQuery);
-
+    // api call to get 5 day forecast
     $.ajax({
       url: forecastQuery,
       method: "GET",
     }).then(function (response) {
-      console.log(response);
+      // weeding through the 40 item list to get the 5 day forecast
       var forecastArray = response.list;
-      console.log(forecastArray);
+      var filteredForecastArray = forecastArray.filter(function (listObj) {
+        var timeStamp = listObj.dt_txt;
+        var timeCheck = timeStamp.includes("12:00:00");
+        console.log(timeCheck);
+        return timeCheck; // returning a boolean
+      });
+      console.log(filteredForecastArray);
 
-      // for (var i = 0; i < forecastArray.length; i++) {
-        // var forecastObj = forecastArray[i];
-        var filteredForecastArray = forecastArray.filter(function(listObj) {
-          var timeStamp = listObj.dt_txt;
-          var timeCheck = timeStamp.includes('12:00:00');
-          console.log(timeCheck);
-          return timeCheck; // returning a boolean
-        });
-        console.log(filteredForecastArray);
-
-
-
-        // var timeStamp = forecastObj.dt_txt;
-        // var forecastDate = moment(timeStamp).format("");
-        // console.log(timeStamp);
-        // console.log(forecastDate);
-        // console.log(forecastDate);
-
-        // if (forecastEntry.includes(""))
-      // }
-      // var forecastTempMinEl = response.main.temp_min;
-      // var forecastTempMaxEl = response.main.temp_max;
-      // var forecastIcon =
-      //   "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
-      // var newLow = $("<div class='low'>Low: " + forecastTempMinEl + "</div>");
-      // var newHigh = $(
-      //   "<div class='high'>High: " + forecastTempMaxEl + "</div>"
-      // );
-      // var newIcon = $("<img src='" + forecastIcon + "'></div>");
-      // var dateDiv = $("<div class='date'>" + forecastDate + "</div>");
-      // var newCol = $("<div class='col' id='forecast'" + i + "></div>").append(
-      //   dateDiv,
-      //   newIcon,
-      //   newLow,
-      //   newHigh
-      // );
-      // $("#forecast" + i).attr("src", forecastIcon);
-      // $("#forecastDiv").append(newCol);
+      // for loop to populate the forecast info
+      for (var i = 0; i < filteredForecastArray.length; i++) {
+        var forecastItem = filteredForecastArray[i];
+        var forecastTemp = forecastItem.main.temp;
+        var forecastDate = moment().add(i + 1, 'd').format("MMMM Do");
+        var forecastIcon =
+          "http://openweathermap.org/img/w/" +
+          forecastItem.weather[0].icon +
+          ".png";
+        var temperature = $(
+          "<div class='temperature'>Temperature: " + forecastTemp + "</div>"
+        );
+        var newIcon = $("<img src='" + forecastIcon + "'/>");
+        var dateDiv = $("<div class='date'>" + forecastDate + "</div>");
+        var newCol = $("<div class='col' id='forecast'" + i + "></div>").append(
+          dateDiv,
+          newIcon,
+          temperature
+        );
+        $("#forecast" + i).attr("src", forecastIcon);
+        $("#forecastDiv").append(newCol);
+      }
     });
 
-    // var cityToBeStored = function (name, key, value) {
-
-    //   // Get the existing data
-    //   var existing = localStorage.getItem(name);
-    
-    //   // If no existing data, create an array
-    //   // Otherwise, convert the localStorage string to an array
-    //   existing = existing ? JSON.parse(existing) : {};
-    
-    //   // Add new data to localStorage Array
-    //   existing[key] = value;
-    
-    //   // Save back to localStorage
-    //   localStorage.setItem(name, JSON.stringify(existing));
-    
-    // };
-
-    window.localStorage.setItem('city', cityEl.val());
+    // array to store searched cities
+    // var pushCity = searchedCityArray.unshift(cityEl.val());
+    window.localStorage.setItem("city", cityEl.val());
   });
 });
 
