@@ -1,6 +1,12 @@
 $(document).ready(function () {
   // pulling information from local storage to populate weather info from the last searched city
-  var lastSearch = window.localStorage.getItem("city");
+  var storedSearches = window.localStorage.getItem("city");
+  if (storedSearches === null) {
+    storedSearches = "[]";
+  }
+  storedSearches = JSON.parse(storedSearches);
+  var lastSearchedCity = storedSearches[0];
+
   // $("#city").val(lastSearch);
   // on-click function for searches
   $("#inputForm").on("submit", function (event) {
@@ -102,8 +108,13 @@ $(document).ready(function () {
     });
 
     // array to store searched cities
-    // var pushCity = searchedCityArray.unshift(cityEl.val());
-    window.localStorage.setItem("city", cityEl.val());
+    var currentCityArray = window.localStorage.getItem("city");
+    if (currentCityArray === null) {
+      currentCityArray = "[]";
+    }
+    currentCityArray = JSON.parse(currentCityArray);
+    currentCityArray.unshift(cityEl.val());
+    window.localStorage.setItem("city", JSON.stringify(currentCityArray));
   });
 });
 
