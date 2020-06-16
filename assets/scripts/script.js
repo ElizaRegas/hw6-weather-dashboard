@@ -33,8 +33,8 @@ $(document).ready(function () {
         var forecastTempMinEl = response.main.temp_min;
         var forecastTempMaxEl = response.main.temp_max;
         var forecastDate = moment().add(i, 'days').format("MMMM Do");
-        // var forecastIcon = "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
-        // var iconPic = $("#forecast" + i).attr("src", forecastIcon);
+        var forecastIcon = "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
+        var iconPic = $("#forecast" + i).attr("src", forecastIcon);
         // console.log(iconPic);
         // var displayTempMin = $("<div id='TempMin'></div>");
         // var displayTempMax = $("<div id='TempMax'></div>");
@@ -42,10 +42,11 @@ $(document).ready(function () {
         // $(displayTempMin).append("Low: " + Math.floor(forecastTempMinEl));
         // $(displayTempMax).append("High: " + Math.floor(forecastTempMaxEl));
         // $("#forecastTempMax").append("High: " + Math.floor(forecastTempMaxEl));
-        // var newLow = $("<div class='low'></div>");
-        // var newIcon = $("<div class='icon'>" + iconPic + "</div>");
+        var newLow = $("<div class='low'>Low: " + forecastTempMinEl + "</div>");
+        var newHigh = $("<div class='high'>High: " + forecastTempMaxEl + "</div>");
+        var newIcon = $("<div class='icon'>" + iconPic + "</div>");
         var dateDiv = $("<div class='date'>" + forecastDate + "</div>");
-        var newCol = $("<div class='col' id='forecast'" + i + "></div>").append(dateDiv);
+        var newCol = $("<div class='col' id='forecast'" + i + "></div>").append(dateDiv, newIcon, newLow, newHigh);
         $("#forecastDiv").append(newCol);
       }
 
