@@ -13,10 +13,12 @@ body {
 .card {
   display: block !important;
   color: black;
+  margin: 1vw;
 }
 .savedSearches {
   width: 100%;
   text-align: left;
+  margin: .1vw;
 }
 
 .weatherDisplay {
