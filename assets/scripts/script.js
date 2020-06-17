@@ -27,6 +27,7 @@ $(document).ready(function () {
       $("#savedSearch").append(newButton);
     }
   }
+  $(".savedSearches").on("click", weatherInformation);
 
   // on-click function for searches
   $("#inputForm").on("submit", weatherInformation);
