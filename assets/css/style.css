@@ -7,15 +7,38 @@ body {
   color: white;
   font-family: "Source Code Pro", monospace;
   font-weight: 200;
-  text-shadow: 1px 1px 0 #000;
+  
 }
 
+.card {
+  display: block !important;
+  color: black;
+}
 .savedSearches {
   width: 100%;
   text-align: left;
 }
+
+.weatherDisplay {
+  margin: 0 2vw 1vw;
+  font-size: 1.5vw;
+}
+
+#button-addon2 {
+  color: black;
+}
+#cityDisplay {
+  font-size: 2.3vw;
+  margin: 2vw;
+  text-shadow: 1px 1px 0 #000;
+}
+
 #header {
   text-align: center !important;
   margin: auto;
   font-size: 3vw;
+}
+
+#icon {
+  height: 5vw;
 }

@@ -31,7 +31,8 @@ $(document).ready(function () {
   $("#inputForm").on("submit", weatherInformation);
 
   // function to get weather information
-  function weatherInformation() {
+  function weatherInformation(event) {
+    // event.preventDefault();
     $("#uvIndex").empty();
     // info variables
     var cityEl = $("#city");
@@ -123,7 +124,7 @@ $(document).ready(function () {
         );
         var newIcon = $("<img src='" + forecastIcon + "'/>");
         var dateDiv = $("<div class='date'>" + forecastDate + "</div>");
-        var newCol = $("<div class='col' id='forecast'" + i + "></div>").append(
+        var newCol = $("<div class='col card' id='forecast'" + i + "></div>").append(
           dateDiv,
           newIcon,
           temperature,
@@ -142,6 +143,7 @@ $(document).ready(function () {
     currentCityArray = JSON.parse(currentCityArray);
     currentCityArray.unshift(cityEl.val());
     window.localStorage.setItem("city", JSON.stringify(currentCityArray));
+    $('#city').val("");
   }
 });
 

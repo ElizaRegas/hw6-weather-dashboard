@@ -40,28 +40,36 @@
     </header>
     <main class="container">
       <div class="row">
-        <aside class="col-sm-4" style="border: 5px solid black;">
+        <aside class="col-sm-4">
           <h4>Search for a City:</h4>
-          <form id="inputForm">
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="city" placeholder="City" aria-describedby="button-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Submit</button>
+            </div>
+          </div>
+
+          <!-- <form id="inputForm">
             <input type="text" class="textInput" id="city" placeholder="City" />
             <button type="submit"></button>
-          </form>
+          </form> -->
           <div id="savedSearch"></div>
         </aside>
-        <section class="col-sm-8" style="border: 5px solid black;">
+        <section class="col-sm-8">
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-8">
               <div id="cityDisplay"></div>
-              <div id="temp"></div>
-              <div id="humidity"></div>
-              <div id="wind"></div>
-              <div id="uvIndex"></div>
+              <div class="weatherDisplay" id="temp"></div>
+              <div class="weatherDisplay" id="humidity"></div>
+              <div class="weatherDisplay" id="wind"></div>
+              <div class="weatherDisplay" id="uvIndex"></div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4 card-body">
               <img id="icon" />
             </div>
           </div>
-          <div class="row" id="forecastDiv" style="border: 5px solid black;">
+          <div class="row" id="forecastDiv">
 
           </div>
         </section>
