@@ -1,50 +1,72 @@
 $(document).ready(function () {
-  // pulling information from local storage to render weather info from the last searched city
-  var storedSearches = window.localStorage.getItem("city");
-  // checking to see if the array is empty
-  if (storedSearches === null) {
-    storedSearches = "[]";
+
+  function getStoredSearches() {
+    // pulling information from local storage to render weather info from the last searched city
+    var storedSearches = window.localStorage.getItem("city");
+    // checking to see if the array is empty
+    if (storedSearches === null) {
+      storedSearches = "[]";
+    }
+    // changing json stored string to an array
+    storedSearches = JSON.parse(storedSearches);
+    return storedSearches;
   }
-  // changing json stored string to an array
-  storedSearches = JSON.parse(storedSearches);
+
+  var storedSearches = getStoredSearches();
   // rendering the last search info to the page on load
   var lastSearchedCity = storedSearches[0];
   $("#city").val(lastSearchedCity);
   window.onload = function (event) {
-    event.preventDefault();
-    weatherInformation();
-    return
+    if (lastSearchedCity) {
+      event.preventDefault();
+      weatherInformation(lastSearchedCity, false);
+    }
   };
-  // rendering buttons with the saved searches
-  for (var i = 0; i < 8; i++) {
-    if (storedSearches[i] === "undefined") {
-      $("#savedSearch").empty();
-      return
-    } else {
-      var newButton = $(
-        "<button class='savedSearches '>" + storedSearches[i] + "</button>"
-      );
-      $("#savedSearch").append(newButton);
+
+  function generateHistoryButtons() {
+    // getting an updated version of the stored searches
+    storedSearches = getStoredSearches();
+    $("#savedSearch").empty();
+    // rendering buttons with the saved searches
+    for (var i = 0; i < 8; i++) {
+      if (storedSearches[i] === "undefined") {
+        $("#savedSearch").empty();
+        return;
+      } else {
+        var newButton = $(
+          "<button class='savedSearches'>" + storedSearches[i] + "</button>"
+        ).on("click", function () {
+          var cityEl = $(this).text();
+          weatherInformation(cityEl, false);
+        });
+        $("#savedSearch").append(newButton);
+      }
     }
   }
-  $(".savedSearches").on("click", weatherInformation);
+  generateHistoryButtons();
+
+  // $(".savedSearches").on("click", function () {
+  //   var cityEl = $(this).text();
+  //   weatherInformation(cityEl, false);
+  // });
 
   // on-click function for searches
-  $("#inputForm").on("submit", weatherInformation);
+  $("#inputForm").on("submit", function () {
+    var cityEl = $("#city");
+    weatherInformation(cityEl.val(), true);
+  });
 
   // function to get weather information
-  function weatherInformation(event) {
-    
-    // event.preventDefault();
+  function weatherInformation(city, isWritingToLocalStorage) {
+    event.preventDefault();
+    console.log(city, isWritingToLocalStorage);
+    $("#forecastDiv").empty();
     $("#uvIndex").empty();
     // info variables
-    var cityEl = $("#city");
     var queryURL =
       "https://api.openweathermap.org/data/2.5/weather?q=" +
-      cityEl.val() +
-      "," +
-      "&units=imperial&appid=e4623b5d3b654119fa6c77a672c21677";
-    console.log(queryURL);
+      city +
+      "&units=imperial&appid=83de499cf8e8b0bfe81af754d679a48b";
 
     // api call to get today's weather
     $.ajax({
@@ -68,10 +90,11 @@ $(document).ready(function () {
       $("#humidity").text(humidity);
 
       var uvqueryURL =
-        "https://api.openweathermap.org/data/2.5/uvi?appid=e4623b5d3b654119fa6c77a672c21677&lat=" +
+        "https://api.openweathermap.org/data/2.5/uvi?appid=83de499cf8e8b0bfe81af754d679a48b&lat=" +
         lat +
         "&lon=" +
         lon;
+      console.log(uvqueryURL);
       // api call to get the uv index
       $.ajax({
         url: uvqueryURL,
@@ -94,8 +117,8 @@ $(document).ready(function () {
 
     var forecastQuery =
       "https://api.openweathermap.org/data/2.5/forecast/?q=" +
-      cityEl.val() +
-      "&units=imperial&appid=e4623b5d3b654119fa6c77a672c21677";
+      city +
+      "&units=imperial&appid=83de499cf8e8b0bfe81af754d679a48b";
     // api call to get 5 day forecast
     $.ajax({
       url: forecastQuery,
@@ -129,26 +152,22 @@ $(document).ready(function () {
         );
         var newIcon = $("<img src='" + forecastIcon + "'/>");
         var dateDiv = $("<div class='date'>" + forecastDate + "</div>");
-        var newCol = $("<div class='col card' id='forecast'" + i + "></div>").append(
-          dateDiv,
-          newIcon,
-          temperature,
-          newHumidEl
-        );
+        var newCol = $(
+          "<div class='col card' id='forecast'" + i + "></div>"
+        ).append(dateDiv, newIcon, temperature, newHumidEl);
         $("#forecast" + i).attr("src", forecastIcon);
         $("#forecastDiv").append(newCol);
       }
     });
 
-    // array to store searched cities
-    var currentCityArray = window.localStorage.getItem("city");
-    if (currentCityArray === null) {
-      currentCityArray = "[]";
+    if (isWritingToLocalStorage) {
+      // var to retrieve stored searches
+      var currentCityArray = getStoredSearches();
+      currentCityArray.unshift(city);
+      window.localStorage.setItem("city", JSON.stringify(currentCityArray));
+      $("#city").val("");
     }
-    currentCityArray = JSON.parse(currentCityArray);
-    currentCityArray.unshift(cityEl.val());
-    window.localStorage.setItem("city", JSON.stringify(currentCityArray));
-    $('#city').val("");
+    generateHistoryButtons();
   }
 });
 
