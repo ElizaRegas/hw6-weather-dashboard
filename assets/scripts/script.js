@@ -96,6 +96,7 @@ $(document).ready(function () {
       for (var i = 0; i < filteredForecastArray.length; i++) {
         var forecastItem = filteredForecastArray[i];
         var forecastTemp = forecastItem.main.temp;
+        var forecastHumidity = forecastItem.main.humidity + "%";
         var forecastDate = moment()
           .add(i + 1, "d")
           .format("MMMM Do");
@@ -106,12 +107,14 @@ $(document).ready(function () {
         var temperature = $(
           "<div class='temperature'>Temperature: " + forecastTemp + "</div>"
         );
+        var newHumidEl = $("<div id='newHumid'>Humidity: <br>" + forecastHumidity + "</div>");
         var newIcon = $("<img src='" + forecastIcon + "'/>");
         var dateDiv = $("<div class='date'>" + forecastDate + "</div>");
         var newCol = $("<div class='col' id='forecast'" + i + "></div>").append(
           dateDiv,
           newIcon,
-          temperature
+          temperature,
+          newHumidEl
         );
         $("#forecast" + i).attr("src", forecastIcon);
         $("#forecastDiv").append(newCol);
@@ -130,13 +133,15 @@ $(document).ready(function () {
 });
 
 
-
+// Done
 // WHEN I search for a city
 // THEN I am presented with current and future conditions for that city and that city is added to the search history
 
+// Done
 // WHEN I view current weather conditions for that city
 // THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
 
+// Done
 // WHEN I view the UV index
 // THEN I am presented with a color that indicates whether the conditions are favorable, moderate, or severe
 
