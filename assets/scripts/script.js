@@ -6,11 +6,16 @@ $(document).ready(function () {
   }
   storedSearches = JSON.parse(storedSearches);
   var lastSearchedCity = storedSearches[0];
-
-  // $("#city").val(lastSearch);
-  // on-click function for searches
-  $("#inputForm").on("submit", function (event) {
+  $('#city').val(lastSearchedCity);
+  window.onload = function(event) {
     event.preventDefault();
+    weatherInformation();
+  };
+
+  // on-click function for searches
+  $("#inputForm").on("submit", weatherInformation); 
+
+  function weatherInformation() {
     $("#uvIndex").empty();
 
     var cityEl = $("#city");
@@ -19,6 +24,7 @@ $(document).ready(function () {
       cityEl.val() +
       "," +
       "&units=imperial&appid=fc53c4afba46f05e9baa04eb35435488";
+
     // api call to get today's weather
     $.ajax({
       url: queryURL,
@@ -27,7 +33,9 @@ $(document).ready(function () {
       var cityDisplayEl = response.name;
       var dateDisplayEl = moment().format("MMMM Do YYYY");
       var icon =
-        "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
+        "http://openweathermap.org/img/w/" +
+        response.weather[0].icon +
+        ".png";
       var temp = "Temperature: " + Math.floor(response.main.temp) + " °F";
       var humidity = "Humidity: " + response.main.humidity + "%";
       var wind = "Wind Speed: " + response.wind.speed.toFixed(1) + " MPH";
@@ -63,6 +71,7 @@ $(document).ready(function () {
         $("#uvIndex").append("UV Index: ").append(uvButtonEl);
       });
     });
+    
 
     var forecastQuery =
       "https://api.openweathermap.org/data/2.5/forecast/?q=" +
@@ -87,7 +96,9 @@ $(document).ready(function () {
       for (var i = 0; i < filteredForecastArray.length; i++) {
         var forecastItem = filteredForecastArray[i];
         var forecastTemp = forecastItem.main.temp;
-        var forecastDate = moment().add(i + 1, 'd').format("MMMM Do");
+        var forecastDate = moment()
+          .add(i + 1, "d")
+          .format("MMMM Do");
         var forecastIcon =
           "http://openweathermap.org/img/w/" +
           forecastItem.weather[0].icon +
@@ -115,15 +126,10 @@ $(document).ready(function () {
     currentCityArray = JSON.parse(currentCityArray);
     currentCityArray.unshift(cityEl.val());
     window.localStorage.setItem("city", JSON.stringify(currentCityArray));
-  });
+  };
 });
 
-//   function emptyInfo() {
-//     $("#icon").empty();
-//     $("#weather").empty();
-//     $("#temp").empty();
-//   }
-// });
+
 
 // WHEN I search for a city
 // THEN I am presented with current and future conditions for that city and that city is added to the search history
