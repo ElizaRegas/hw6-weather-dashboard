@@ -7,7 +7,6 @@ body {
   color: white;
   font-family: "Source Code Pro", monospace;
   font-weight: 200;
-  
 }
 
 .card {
@@ -15,6 +14,7 @@ body {
   color: black;
   margin: 1vw;
 }
+
 .savedSearches {
   width: 100%;
   text-align: left;
@@ -30,6 +30,7 @@ body {
 #button-addon2 {
   color: rgb(34, 31, 31);
 }
+
 #cityDisplay {
   font-size: 2.3vw;
   margin: 2vw;

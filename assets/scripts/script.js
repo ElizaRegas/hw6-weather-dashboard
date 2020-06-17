@@ -9,11 +9,12 @@ $(document).ready(function () {
     }
     // changing json stored string to an array
     storedSearches = JSON.parse(storedSearches);
+    // returning the storedSearches var for later use
     return storedSearches;
   }
 
   var storedSearches = getStoredSearches();
-  // rendering the last search info to the page on load
+  // rendering the last searched city to the page on load
   var lastSearchedCity = storedSearches[0];
   $("#city").val(lastSearchedCity);
   window.onload = function (event) {
@@ -30,7 +31,7 @@ $(document).ready(function () {
     // rendering buttons with the saved searches
     for (var i = 0; i < 8; i++) {
       if (storedSearches[i] === undefined) {
-        return;        
+        return; // could have used "continue" here, but went with return for familiarity        
       } else {
         var newButton = $(
           "<button class='savedSearches'>" + storedSearches[i] + "</button>"
@@ -50,7 +51,8 @@ $(document).ready(function () {
     weatherInformation(cityEl.val(), true);
   });
 
-  // function to get weather information
+  // function to get weather information- passing in the city and a boolean to determine whether or not
+  // to write the info to local storage
   function weatherInformation(city, isWritingToLocalStorage) {
     event.preventDefault();
     $("#forecastDiv").empty();
@@ -66,7 +68,6 @@ $(document).ready(function () {
       url: queryURL,
       method: "GET",
     }).then(function (response) {
-      console.log(response);
       var cityDisplayEl = response.name;
       var dateDisplayEl = moment().format("MMMM Do YYYY");
       var icon =
@@ -81,13 +82,12 @@ $(document).ready(function () {
       $("#wind").text(wind);
       $("#temp").text(temp);
       $("#humidity").text(humidity);
-
+      // setting the query url to get the uv index
       var uvqueryURL =
         "https://api.openweathermap.org/data/2.5/uvi?appid=83de499cf8e8b0bfe81af754d679a48b&lat=" +
         lat +
         "&lon=" +
         lon;
-      console.log(uvqueryURL);
       // api call to get the uv index
       $.ajax({
         url: uvqueryURL,
@@ -107,7 +107,7 @@ $(document).ready(function () {
         $("#uvIndex").append("UV Index: ").append(uvButtonEl);
       });
     });
-
+    // setting the forecast query to get the 5 day forecast
     var forecastQuery =
       "https://api.openweathermap.org/data/2.5/forecast/?q=" +
       city +
@@ -120,6 +120,7 @@ $(document).ready(function () {
       // weeding through the 40 item list to get the 5 day forecast
       var forecastArray = response.list;
       var filteredForecastArray = forecastArray.filter(function (listObj) {
+        // targeting the date and time info to return daily information for 8:00AM Atlanta time
         var timeStamp = listObj.dt_txt;
         var timeCheck = timeStamp.includes("12:00:00");
         return timeCheck; // returning a boolean
@@ -152,7 +153,7 @@ $(document).ready(function () {
         $("#forecastDiv").append(newCol);
       }
     });
-
+    // writing to local storage
     if (isWritingToLocalStorage) {
       // var to retrieve stored searches
       var currentCityArray = getStoredSearches();
