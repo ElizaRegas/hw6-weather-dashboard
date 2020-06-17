@@ -29,9 +29,8 @@ $(document).ready(function () {
     $("#savedSearch").empty();
     // rendering buttons with the saved searches
     for (var i = 0; i < 8; i++) {
-      if (storedSearches[i] === "undefined") {
-        $("#savedSearch").empty();
-        return;
+      if (storedSearches[i] === undefined) {
+        return;        
       } else {
         var newButton = $(
           "<button class='savedSearches'>" + storedSearches[i] + "</button>"
@@ -45,11 +44,6 @@ $(document).ready(function () {
   }
   generateHistoryButtons();
 
-  // $(".savedSearches").on("click", function () {
-  //   var cityEl = $(this).text();
-  //   weatherInformation(cityEl, false);
-  // });
-
   // on-click function for searches
   $("#inputForm").on("submit", function () {
     var cityEl = $("#city");
@@ -59,7 +53,6 @@ $(document).ready(function () {
   // function to get weather information
   function weatherInformation(city, isWritingToLocalStorage) {
     event.preventDefault();
-    console.log(city, isWritingToLocalStorage);
     $("#forecastDiv").empty();
     $("#uvIndex").empty();
     // info variables
