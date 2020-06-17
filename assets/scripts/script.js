@@ -1,18 +1,46 @@
 $(document).ready(function () {
-  // pulling information from local storage to populate weather info from the last searched city
-  var lastSearch = window.localStorage.getItem("city");
-  // $("#city").val(lastSearch);
-  // on-click function for searches
-  $("#inputForm").on("submit", function (event) {
+  // pulling information from local storage to render weather info from the last searched city
+  var storedSearches = window.localStorage.getItem("city");
+  // checking to see if the array is empty
+  if (storedSearches === null) {
+    storedSearches = "[]";
+  }
+  // changing json stored string to an array
+  storedSearches = JSON.parse(storedSearches);
+  // rendering the last search info to the page on load
+  var lastSearchedCity = storedSearches[0];
+  $("#city").val(lastSearchedCity);
+  window.onload = function (event) {
     event.preventDefault();
-    $("#uvIndex").empty();
+    weatherInformation();
+    return
+  };
+  // rendering buttons with the saved searches
+  for (var i = 0; i < 8; i++) {
+    if (storedSearches[i] === "undefined") {
+      return
+    } else {
+      var newButton = $(
+        "<button class='savedSearches'>" + storedSearches[i] + "</button>"
+      );
+      $("#savedSearch").append(newButton);
+    }
+  }
 
+  // on-click function for searches
+  $("#inputForm").on("submit", weatherInformation);
+
+  // function to get weather information
+  function weatherInformation() {
+    $("#uvIndex").empty();
+    // info variables
     var cityEl = $("#city");
     var queryURL =
       "https://api.openweathermap.org/data/2.5/weather?q=" +
       cityEl.val() +
       "," +
       "&units=imperial&appid=fc53c4afba46f05e9baa04eb35435488";
+
     // api call to get today's weather
     $.ajax({
       url: queryURL,
@@ -72,16 +100,17 @@ $(document).ready(function () {
       var filteredForecastArray = forecastArray.filter(function (listObj) {
         var timeStamp = listObj.dt_txt;
         var timeCheck = timeStamp.includes("12:00:00");
-        console.log(timeCheck);
         return timeCheck; // returning a boolean
       });
-      console.log(filteredForecastArray);
 
       // for loop to populate the forecast info
       for (var i = 0; i < filteredForecastArray.length; i++) {
         var forecastItem = filteredForecastArray[i];
         var forecastTemp = forecastItem.main.temp;
-        var forecastDate = moment().add(i + 1, 'd').format("MMMM Do");
+        var forecastHumidity = forecastItem.main.humidity + "%";
+        var forecastDate = moment()
+          .add(i + 1, "d")
+          .format("MMMM Do");
         var forecastIcon =
           "http://openweathermap.org/img/w/" +
           forecastItem.weather[0].icon +
@@ -89,12 +118,16 @@ $(document).ready(function () {
         var temperature = $(
           "<div class='temperature'>Temperature: " + forecastTemp + "</div>"
         );
+        var newHumidEl = $(
+          "<div id='newHumid'>Humidity: <br>" + forecastHumidity + "</div>"
+        );
         var newIcon = $("<img src='" + forecastIcon + "'/>");
         var dateDiv = $("<div class='date'>" + forecastDate + "</div>");
         var newCol = $("<div class='col' id='forecast'" + i + "></div>").append(
           dateDiv,
           newIcon,
-          temperature
+          temperature,
+          newHumidEl
         );
         $("#forecast" + i).attr("src", forecastIcon);
         $("#forecastDiv").append(newCol);
@@ -102,32 +135,35 @@ $(document).ready(function () {
     });
 
     // array to store searched cities
-    // var pushCity = searchedCityArray.unshift(cityEl.val());
-    window.localStorage.setItem("city", cityEl.val());
-  });
+    var currentCityArray = window.localStorage.getItem("city");
+    if (currentCityArray === null) {
+      currentCityArray = "[]";
+    }
+    currentCityArray = JSON.parse(currentCityArray);
+    currentCityArray.unshift(cityEl.val());
+    window.localStorage.setItem("city", JSON.stringify(currentCityArray));
+  }
 });
 
-//   function emptyInfo() {
-//     $("#icon").empty();
-//     $("#weather").empty();
-//     $("#temp").empty();
-//   }
-// });
-
+// Done
 // WHEN I search for a city
 // THEN I am presented with current and future conditions for that city and that city is added to the search history
 
+// Done
 // WHEN I view current weather conditions for that city
 // THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
 
+// Done
 // WHEN I view the UV index
 // THEN I am presented with a color that indicates whether the conditions are favorable, moderate, or severe
 
+// Done
 // WHEN I view future weather conditions for that city
 // THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, and the humidity
 
 // WHEN I click on a city in the search history
 // THEN I am again presented with current and future conditions for that city
 
+// DONE
 // WHEN I open the weather dashboard
 // THEN I am presented with the last searched city forecast
