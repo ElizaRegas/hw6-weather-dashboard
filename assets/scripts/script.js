@@ -18,10 +18,11 @@ $(document).ready(function () {
   // rendering buttons with the saved searches
   for (var i = 0; i < 8; i++) {
     if (storedSearches[i] === "undefined") {
+      $("#savedSearch").empty();
       return
     } else {
       var newButton = $(
-        "<button class='savedSearches'>" + storedSearches[i] + "</button>"
+        "<button class='savedSearches '>" + storedSearches[i] + "</button>"
       );
       $("#savedSearch").append(newButton);
     }
@@ -32,6 +33,7 @@ $(document).ready(function () {
 
   // function to get weather information
   function weatherInformation(event) {
+    
     // event.preventDefault();
     $("#uvIndex").empty();
     // info variables
@@ -40,13 +42,15 @@ $(document).ready(function () {
       "https://api.openweathermap.org/data/2.5/weather?q=" +
       cityEl.val() +
       "," +
-      "&units=imperial&appid=fc53c4afba46f05e9baa04eb35435488";
+      "&units=imperial&appid=e4623b5d3b654119fa6c77a672c21677";
+    console.log(queryURL);
 
     // api call to get today's weather
     $.ajax({
       url: queryURL,
       method: "GET",
     }).then(function (response) {
+      console.log(response);
       var cityDisplayEl = response.name;
       var dateDisplayEl = moment().format("MMMM Do YYYY");
       var icon =
@@ -63,7 +67,7 @@ $(document).ready(function () {
       $("#humidity").text(humidity);
 
       var uvqueryURL =
-        "https://api.openweathermap.org/data/2.5/uvi?appid=fc53c4afba46f05e9baa04eb35435488&lat=" +
+        "https://api.openweathermap.org/data/2.5/uvi?appid=e4623b5d3b654119fa6c77a672c21677&lat=" +
         lat +
         "&lon=" +
         lon;
@@ -90,7 +94,7 @@ $(document).ready(function () {
     var forecastQuery =
       "https://api.openweathermap.org/data/2.5/forecast/?q=" +
       cityEl.val() +
-      "&units=imperial&appid=a5e5240beae7c329a8e79847c343d8d3";
+      "&units=imperial&appid=e4623b5d3b654119fa6c77a672c21677";
     // api call to get 5 day forecast
     $.ajax({
       url: forecastQuery,

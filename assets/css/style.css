@@ -22,10 +22,11 @@ body {
 .weatherDisplay {
   margin: 0 2vw 1vw;
   font-size: 1.5vw;
+  color: rgb(34, 30, 30);
 }
 
 #button-addon2 {
-  color: black;
+  color: rgb(34, 31, 31);
 }
 #cityDisplay {
   font-size: 2.3vw;
