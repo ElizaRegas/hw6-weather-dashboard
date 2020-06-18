@@ -13,7 +13,7 @@ This weather dashboard was a homework assignment which is required, in order to 
 
 ## Usage 
 
-To access the day planner,
+To access the Weather Dashboard,
 [CLICK HERE](https://elizaregas.github.io/hw6-weather-dashboard)
 
 ![JS Quiz](./assets/images/Weatherpic.png)
